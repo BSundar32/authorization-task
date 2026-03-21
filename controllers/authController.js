@@ -104,7 +104,6 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Find user by email (explicitly select password since it's not selected by default)
     const user = await User.findOne({ email }).select('+password');
 
     // Check if user exists
@@ -196,9 +195,6 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-/**
- * Get All Users Controller (Admin only - for reference)
- */
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');

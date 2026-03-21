@@ -1,15 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-/**
- * JWT Verification Middleware
- * 
- * This middleware verifies the JWT token from the request headers.
- * It extracts the Bearer token from the Authorization header,
- * validates it, and attaches the decoded user information to the request object.
- * 
- * Usage: Apply to routes that require authentication
- * Example: router.get('/profile', verifyToken, getProfile)
- */
 const verifyToken = (req, res, next) => {
   try {
     // Get token from Authorization header
@@ -42,22 +32,6 @@ const verifyToken = (req, res, next) => {
 
     next();
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({
-        success: false,
-        message: 'Token has expired. Please login again.',
-        error: 'TokenExpiredError'
-      });
-    }
-
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid token. Please check your token.',
-        error: 'JsonWebTokenError'
-      });
-    }
-
     return res.status(500).json({
       success: false,
       message: 'Error verifying token',

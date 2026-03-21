@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-/**
- * User Schema
- * Defines the structure for user documents in MongoDB
- * 
- * Fields:
- * - username: Unique username for the user
- * - email: Unique email address
- * - password: Hashed password stored in database
- * - firstName: User's first name
- * - lastName: User's last name
- * - createdAt: Timestamp when user account was created
- * - updatedAt: Timestamp when user account was last updated
- */
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -52,39 +39,26 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-/**
- * Pre-save middleware to hash password before saving
- * Only hashes password if it's been modified or is new
- */
-userSchema.pre('save', async function (next) {
-  // Only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) {
-    return next();
-  }
+// userSchema.pre('save', async function (next) {
+//   // Only hash the password if it has been modified (or is new)
+//   if (!this.isModified('password')) {
+//     return next();
+//   }
 
-  try {
-    // Generate salt and hash password
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+//   try {
+//     // Generate salt and hash password
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
-/**
- * Method to compare provided password with hashed password in database
- * @param {string} providedPassword - The password provided by the user
- * @returns {Promise<boolean>} - True if passwords match, false otherwise
- */
 userSchema.methods.comparePassword = async function (providedPassword) {
   return await bcrypt.compare(providedPassword, this.password);
 };
 
-/**
- * Method to get user details without sensitive information
- * @returns {object} - User object without password field
- */
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;

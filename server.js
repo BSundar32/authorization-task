@@ -39,7 +39,21 @@ const connectDB = async () => {
 /**
  * API ROUTES
  */
+//welcome route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to the User Authentication API',
+    endPoints: {
+      'GET  /api/health': 'Health check',
+      'POST   /api/auth/register': 'Register new user',
+      'POST   /api/auth/login': 'Login user',
+      'GET    /api/auth/profile': 'Get user profile (protected)',
+      'GET    /api/auth/users': 'Get all users'
+    }
 
+  });
+});
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
